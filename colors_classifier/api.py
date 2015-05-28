@@ -40,15 +40,15 @@ def classify_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
     new_palette = {}
     for k, v in palette.iteritems():
         new_palette[k] = convert_color(sRGBColor(*palette[k], is_upscaled=True), LabColor, target_illuminant='d50')
-    #palette = new_palette
+    palette = new_palette
 
     def _get_nearest_color(color, palette):
-        #color = convert_color(sRGBColor(*color, is_upscaled=True), LabColor, target_illuminant='d50')
+        color = convert_color(sRGBColor(*color, is_upscaled=True), LabColor, target_illuminant='d50')
         nearest_color = None
         nearest_distance = maxint
         for color_name, color_value in palette.iteritems():
-            # distance = delta_e_cie1976(color, color_value)
-            distance = manhattan(color, color_value)
+            distance = delta_e_cie1976(color, color_value)
+            # distance = manhattan(color, color_value)
             if distance < nearest_distance:
                 nearest_distance = distance
                 nearest_color = color_name

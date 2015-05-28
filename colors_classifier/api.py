@@ -3,6 +3,7 @@ from sys import maxint
 from PIL import Image
 import logging
 
+# enabled logging generates huge overhead on color space conversions
 logging.disable(logging.DEBUG)
 
 from colormath.color_objects import LabColor, sRGBColor
@@ -26,6 +27,7 @@ def _get_image_colors(image):
 
 
 def classify_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
+    """ Returns list of human-friendly color names, ordered by appearance in a given image. """
     assert image_path is not None
     # load image
     image = _load_image(image_path)
@@ -66,17 +68,22 @@ def classify_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
 
 
 def dominant_color(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
-    """ Returns the most dominant color for a given image path.
-    """
+    """ Returns the most dominant, single color for a given image path. """
     colors = classify_colors(image_path, palette=palette, color_space=color_space)
-
-    # return the most dominant color
     return sorted([[k, v] for k, v in colors.items()], key=lambda x: -1 * x[1])[0][0]
 
 
 def extract_palette(image_path, palette=XKCD_49_PALETTE, color_space="RGB", max_colors=8):
+    """ Returns list of most represented colors on image, ordered by number of appearances.
+
+    Params:
+    max_colors - maximum number of colors in palette (can be less if less number of colors has been identified)
+    """
     colors = classify_colors(image_path, palette=palette, color_space=color_space)
 
+    # order by appearances
     colors = sorted([[k, v] for k, v in colors.items()], key=lambda x: -1 * x[1])
+    # remove colors with no representation on image
     colors = filter(lambda x: x[1] > 0, colors)
+
     return [c[0] for c in colors][:max_colors]

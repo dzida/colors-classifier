@@ -1,5 +1,5 @@
 # encoding: utf-8
-from dominant_color.colors import Color
+from colors_classifier.colors import Color
 
 
 # pallete of 16 commonly used web colors

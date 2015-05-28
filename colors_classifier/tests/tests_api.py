@@ -2,7 +2,7 @@
 from os import path
 from unittest import TestCase
 
-from dominant_color.api import find_dominant_color
+from colors_classifier.api import find_dominant_color
 
 
 class DominantColorTests(TestCase):

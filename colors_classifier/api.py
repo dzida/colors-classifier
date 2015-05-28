@@ -33,7 +33,7 @@ def find_dominant_color(image_path, palette=XKCD_48_PALETTE, color_space="RGB"):
     image = _load_image(image_path)
 
     image.thumbnail((400, 300))
-    image.save("thumb.jpg")
+    
     # get colors from image
     image_colors = _get_image_colors(image)
 

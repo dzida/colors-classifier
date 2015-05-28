@@ -2,7 +2,7 @@
 from os import path
 from unittest import TestCase
 
-from dominant_color.colors import Color
+from colors_classifier.colors import Color
 
 
 class ColorTests(TestCase):

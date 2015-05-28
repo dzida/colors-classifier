@@ -2,7 +2,7 @@
 from os import path
 from unittest import TestCase
 
-from dominant_color.palettes import PaletteColorsCounter, WEB_PALETTE
+from colors_classifier.palettes import PaletteColorsCounter, WEB_PALETTE
 
 
 class PaletteColorCounterTests(TestCase):

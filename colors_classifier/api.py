@@ -9,7 +9,7 @@ from colormath.color_objects import LabColor, sRGBColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie1976
 
-from palettes import XKCD_48_PALETTE, PaletteColorsCounter
+from palettes import XKCD_49_PALETTE, WEB_PALETTE, PaletteColorsCounter
 
 
 def manhattan(p1, p2):
@@ -25,15 +25,13 @@ def _get_image_colors(image):
     return image.getcolors(_size[0] * _size[1])
 
 
-def find_dominant_color(image_path, palette=XKCD_48_PALETTE, color_space="RGB"):
-    """ Returns the most dominant color for a given image path.
-    """
+def classify_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
     assert image_path is not None
     # load image
     image = _load_image(image_path)
 
     image.thumbnail((400, 300))
-    
+
     # get colors from image
     image_colors = _get_image_colors(image)
 
@@ -43,7 +41,6 @@ def find_dominant_color(image_path, palette=XKCD_48_PALETTE, color_space="RGB"):
     for k, v in palette.iteritems():
         new_palette[k] = convert_color(sRGBColor(*palette[k], is_upscaled=True), LabColor, target_illuminant='d50')
     #palette = new_palette
-    image_in_space = image_colors
 
     def _get_nearest_color(color, palette):
         #color = convert_color(sRGBColor(*color, is_upscaled=True), LabColor, target_illuminant='d50')
@@ -65,6 +62,24 @@ def find_dominant_color(image_path, palette=XKCD_48_PALETTE, color_space="RGB"):
         palette_colors[nearest_color_name] += color_count
 
     print "Palette colors", palette_colors
+    return palette_colors
+
+
+def dominant_color(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
+    """ Returns the most dominant color for a given image path.
+    """
+    colors = classify_colors(image_path, palette=palette, color_space=color_space)
 
     # return the most dominant color
-    return sorted([[k, v] for k, v in palette_colors.items()], key=lambda x: -1 * x[1])[0][0]
+    return sorted([[k, v] for k, v in colors.items()], key=lambda x: -1 * x[1])[0][0]
+
+
+def extract_palette(image_path, palette=XKCD_49_PALETTE, color_space="RGB", max_colors=8):
+    """ Returns the most dominant color for a given image path.
+    """
+    colors = classify_colors(image_path, palette=palette, color_space=color_space)
+
+    # return the most dominant color
+    colors = sorted([[k, v] for k, v in colors.items()], key=lambda x: -1 * x[1])
+    colors = filter(lambda x: x[1] > 0, colors)
+    return [c[0] for c in colors][:max_colors]

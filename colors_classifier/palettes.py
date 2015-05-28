@@ -980,9 +980,9 @@ XKCD_FULL_PALETTE = {
 }
 
 
-# selection of 48 colors from xkcd palette
+# selection of 48 colors from xkcd palette + white
 # (those are colors published directly on mentioned article)
-XKCD_48_PALETTE = {
+XKCD_49_PALETTE = {
     "light pink":    Color.from_hex("#FFD1DF").rgb,
     "mustard":    Color.from_hex("#CEB301").rgb,
     "indigo":    Color.from_hex("#380282").rgb,
@@ -1030,14 +1030,15 @@ XKCD_48_PALETTE = {
     "pink":    Color.from_hex("#FF81C0").rgb,
     "blue":    Color.from_hex("#0343DF").rgb,
     "green":    Color.from_hex("#15B01A").rgb,
-    "purple":    Color.from_hex("#7E1E9C").rgb
+    "purple":    Color.from_hex("#7E1E9C").rgb,
+    "white":    Color.from_hex("#FFFFFF").rgb
 }
 
 # all available palettes
 PALETTES = {
     "web": WEB_PALETTE,
     "xkcd_full": XKCD_FULL_PALETTE,
-    "xkcd_48": XKCD_48_PALETTE
+    "xkcd_49": XKCD_49_PALETTE
 }
 
 

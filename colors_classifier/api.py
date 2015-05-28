@@ -6,7 +6,7 @@ import logging
 # enabled logging generates huge overhead on color space conversions
 logging.disable(logging.DEBUG)
 
-from colormath.color_objects import LabColor, sRGBColor
+from colors_classifier.colors import Color
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie1976
 
@@ -23,7 +23,7 @@ def _load_image(image_path):
 
 def _get_image_colors(image):
     _size = image.size
-    return image.getcolors(_size[0] * _size[1])
+    return ((count, Color(*color_tuple, is_upscaled=True)) for count, color_tuple in image.getcolors(_size[0] * _size[1]))
 
 
 def classify_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
@@ -37,20 +37,15 @@ def classify_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
     # get colors from image
     image_colors = _get_image_colors(image)
 
-    # transcode to other space (image and palette)
     palette = palette
-    new_palette = {}
-    for k, v in palette.iteritems():
-        new_palette[k] = convert_color(sRGBColor(*palette[k], is_upscaled=True), LabColor, target_illuminant='d50')
-    palette = new_palette
 
     def _get_nearest_color(color, palette):
-        color = convert_color(sRGBColor(*color, is_upscaled=True), LabColor, target_illuminant='d50')
         nearest_color = None
         nearest_distance = maxint
+
         for color_name, color_value in palette.iteritems():
-            distance = delta_e_cie1976(color, color_value)
-            # distance = manhattan(color, color_value)
+            # distance = delta_e_cie1976(color.cords(), color_value.cords())
+            distance = manhattan(color.cords(), color_value.cords())
             if distance < nearest_distance:
                 nearest_distance = distance
                 nearest_color = color_name
@@ -67,13 +62,7 @@ def classify_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
     return palette_colors
 
 
-def dominant_color(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
-    """ Returns the most dominant, single color for a given image path. """
-    colors = classify_colors(image_path, palette=palette, color_space=color_space)
-    return sorted([[k, v] for k, v in colors.items()], key=lambda x: -1 * x[1])[0][0]
-
-
-def extract_palette(image_path, palette=XKCD_49_PALETTE, color_space="RGB", max_colors=8):
+def extract_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB", max_colors=8):
     """ Returns list of most represented colors on image, ordered by number of appearances.
 
     Params:

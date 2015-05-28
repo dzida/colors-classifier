@@ -1,11 +1,17 @@
 # encoding: utf-8
 import baker
 
+from colors_classifier import api
 
 @baker.command
 def extract_colors(max_colors=1, *args):
-    print max_colors
-    print args
+
+    results = {}
+    for image_path in args:
+        colors = api.extract_colors(image_path, max_colors=max_colors)
+        results[image_path] = colors
+
+    print results
 
 
 def main():

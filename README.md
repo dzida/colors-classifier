@@ -34,11 +34,13 @@ To provide best results in various cases it is configurable which color space is
 Mentioned functions are also available from a command line interface:
 
 ```
-colors-classifier dominant_colors <IMAGE_PATHS> --palette web --color_space rgb
+colors-classifier extract_colors <IMAGE_PATHS> --max_colors 4 --palette web --color_space rgb
 ```
 
 ## Dependencies
-colormath - 2.2.1  (RGB-LAB conversion)
-numpy - 1.9.2  (colormath dependency)
-baker - 1.3  (CLI helper)
+Version numbers refer to dependencies versions used in tests.
+* colormath - 2.2.1  (RGB-LAB conversion)
+* numpy - 1.9.2  (colormath dependency)
+* baker - 1.3  (CLI helper)
+* Pillow - 2.8.1 (imaging library)
 

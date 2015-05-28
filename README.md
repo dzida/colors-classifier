@@ -38,6 +38,7 @@ colors-classifier dominant_colors <IMAGE_PATHS> --palette web --color_space rgb
 ```
 
 ## Dependencies
-colormath - 2.2.1
-numpy - 1.6.3
+colormath - 2.2.1  (RGB-LAB conversion)
+numpy - 1.9.2  (colormath dependency)
+baker - 1.3  (CLI helper)
 

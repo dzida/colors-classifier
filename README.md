@@ -1,8 +1,12 @@
 # colors-classifier
-Image analysis tools that allows to get the most dominant color name from image.
+Image analysis tools that allows to get the most dominant color names from an image.
 
 ## Problem
-Having an image, what are the most dominant colors represented on it?
+Having an image, what are the most dominant colors on it?
+Would two different people name colors the same way?
+How all possible colors that could be displayed (eg. 24bit RGB = 65536 colors) should be assigned to
+a "human friendly name" of a color. What does a difference between color mean?
+
 There are a few concerns that need to be examined before addressing this issue.
 
 ### Base colors palette
@@ -20,7 +24,7 @@ One of the goals of the program is to left base color palette configured by user
 provided (eg. web, xkcd).
 
 ### Human perception vs. digital colors
-Colors perception is subjective by it's nature. Additionally there are some technical limitations that affects colors perception
+Colors perception is subjective by it's nature. Additionally there are some technical limitations that affect colors perception
 when using digital devices (eg. RGB vs natural color perception). This might be significant matter in a solution that
 implements colors comparison algorithms.
 

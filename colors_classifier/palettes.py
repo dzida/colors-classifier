@@ -12,22 +12,20 @@ class Palette(object):
     # TODO: add_color (palette modification with index rebuild)
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, color_space=None, **kwargs):
         self.names = kwargs.keys()
         self.colors = kwargs.values()
+        self.color_space = color_space
 
         if self.colors:
-            leaf_size = len(self.colors[0].values())
-            self._tree = KDTree([color.values() for color in self.colors], leaf_size=leaf_size)
+            leaf_size = len(self.colors[0].values(color_space=self.color_space))
+            self._tree = KDTree([color.values(color_space=self.color_space) for color in self.colors],
+                                leaf_size=leaf_size)
         else:
             self._tree = None
 
-    @property
-    def distance_index(self):
-        return self._tree
-
     def find_nearest(self, color_to_examine):
-        distance, index = self.distance_index.query(color_to_examine.values(), k=1)
+        distance, index = self._tree.query(color_to_examine.values(self.color_space), k=1)
         return self.names[index], self.colors[index]
 
 

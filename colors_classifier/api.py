@@ -6,10 +6,8 @@ logging.disable(logging.DEBUG)
 
 
 from colors_classifier.image_utils import get_image_colors, load_image
-from colormath.color_conversions import convert_color
-
-
-from palettes import XKCD_49_PALETTE, PaletteColorsCounter, Palette
+from colors_classifier.palettes import XKCD_49_PALETTE, PaletteColorsCounter, Palette
+from colors_classifier.colors import ColorSpace
 
 
 def classify_colors(image_colors, palette):
@@ -24,7 +22,7 @@ def classify_colors(image_colors, palette):
     return palette_colors
 
 
-def extract_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB", max_colors=8, scale_by=0.25):
+def extract_colors(image_path, palette=XKCD_49_PALETTE, color_space=ColorSpace.LAB, max_colors=8, scale_by=0.25):
     """ Returns list of most represented colors on image, ordered by number of appearances.
 
     Params:
@@ -37,7 +35,9 @@ def extract_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB", max_c
     image_colors = get_image_colors(image)
 
     if isinstance(palette, dict):
-        palette = Palette(**palette)
+        palette = Palette(color_space=color_space, **palette)
+    else:
+        assert palette.color_space == color_space
 
     colors = classify_colors(image_colors, palette=palette)
 

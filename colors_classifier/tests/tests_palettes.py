@@ -40,7 +40,7 @@ class PaletteTests(TestCase):
     def test_palette_has_index(self):
         palette = Palette(a=Color.from_hex("#FF0000"))
 
-        index = palette.distance_index
+        index = palette._tree
         self.assertTrue(index is not None)
 
     # def test_rebuild_changes_index(self):

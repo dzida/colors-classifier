@@ -29,14 +29,14 @@ class ImagesTests(TestCase):
     def test_bag(self):
         image_path = self._full_path("images/bag.jpg")
         palette = extract_colors(image_path, max_colors=2)
-        self.assertEquals(palette, ["white", "dark pink"])
+        self.assertEquals(palette, ["white", "salmon"])
 
     def test_flag(self):
         image_path = self._full_path("images/flag.jpg")
-        palette = extract_colors(image_path, max_colors=5)
-        self.assertEquals(palette, ["blue", "red", "white"])
+        palette = extract_colors(image_path, max_colors=3)
+        self.assertEquals(palette, ["navy blue", "red", "white"])
 
     def test_sign(self):
-        image_path = self._full_path("images/flag.jpg")
+        image_path = self._full_path("images/sign.jpg")
         palette = extract_colors(image_path, max_colors=3)
-        self.assertEquals(palette, ["yellow", "black", "teal"])
+        self.assertEquals(palette, ["light blue", "orange", "black"])

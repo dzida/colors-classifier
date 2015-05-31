@@ -6,7 +6,7 @@ from colors_classifier.api import extract_colors
 
 
 class PaletteExtractionTests(TestCase):
-    EXAMPLE_IMAGE = path.join(path.dirname(path.realpath(__file__)), "images/lenna.jpg")
+    EXAMPLE_IMAGE = path.join(path.dirname(path.realpath(__file__)), "images/flag.jpg")
 
     def test_not_existing_image(self):
         self.assertRaises(IOError, extract_colors, image_path="/not-existing-image.jpg")

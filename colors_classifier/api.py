@@ -36,7 +36,10 @@ def extract_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB", max_c
     # get colors from image
     image_colors = get_image_colors(image)
 
-    colors = classify_colors(image_colors, palette=Palette(**palette))
+    if isinstance(palette, dict):
+        palette = Palette(**palette)
+
+    colors = classify_colors(image_colors, palette=palette)
 
     # order by appearances
     colors = sorted([[k, v] for k, v in colors.items()], key=lambda x: -1 * x[1])

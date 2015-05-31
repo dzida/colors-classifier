@@ -1,47 +1,51 @@
 # encoding: utf-8
-from sys import maxint
+from sklearn.neighbors import KDTree
+
 from colors_classifier.colors import Color
 
 
-def manhattan(p1, p2):
-    return sum((abs(p1[i] - p2[i])) for i in range(len(p1)))
-
-
-class Palette(dict):
+class Palette(object):
     """ Wrapper for palette configuration.
 
     Provides logic to find nearest color available in a palette.
-    """
-    def __init__(self, *args, **kwargs):
-        super(Palette, self).__init__(*args, **kwargs)
-        self._distance_index = tuple()
 
-    @property
-    def color_names(self):
-        return self.keys()
+    # TODO: add_color (palette modification with index rebuild)
+    """
+    def __init__(self, **kwargs):
+        self.names = kwargs.keys()
+        self.colors = kwargs.values()
+
+        if self.colors:
+            leaf_size = len(self.colors[0].values())
+            self._tree = KDTree([color.values() for color in self.colors], leaf_size=leaf_size)
+        else:
+            self._tree = None
 
     @property
     def distance_index(self):
-        return self._distance_index
+        return self._tree
 
-    def find_nearest(self, color):
-        nearest_color = None
-        nearest_distance = maxint
+    def find_nearest(self, color_to_examine):
+        distance, index = self.distance_index.query(color_to_examine.values(), k=1)
+        return self.names[index], self.colors[index]
 
-        for color_name, color_value in self.iteritems():
-            # distance = delta_e_cie1976(color.values(), color_value.values())
-            distance = manhattan(color.values(), color_value.values())
-            if distance < nearest_distance:
-                nearest_distance = distance
-                nearest_color = color_name, color_value
 
-        return nearest_color
+class PaletteColorsCounter(dict):
+    """ Helper class for counting occurrences of a given color. """
+
+    @staticmethod
+    def from_palette(palette):
+        """ Constructs dict with pre-populated keys from a given palette dict.
+
+         Sets initial counters to 0 for each key.
+        """
+        return PaletteColorsCounter(**{k:0 for k in palette.names})
 
 
 # pallete of 16 commonly used web colors
 # in accordance to HTML 4.01
 # (http://en.wikipedia.org/wiki/Web_colors)
-WEB_PALETTE = Palette(**{
+WEB_PALETTE = {
     "white":    Color.from_hex("#FFFFFF"),
     "silver":   Color.from_hex("#C0C0C0"),
     "gray":     Color.from_hex("#808080"),
@@ -58,12 +62,12 @@ WEB_PALETTE = Palette(**{
     "navy":     Color.from_hex("#000080"),
     "fuchsia":  Color.from_hex("#FF00FF"),
     "purple":   Color.from_hex("#800080")
-})
+}
 
 
 # palette created as a result of survey
 # published by xkcd: http://blog.xkcd.com/2010/05/03/color-survey-results/
-XKCD_FULL_PALETTE = Palette(**{
+XKCD_FULL_PALETTE = {
     "cloudy blue":    Color.from_hex("#ACC2D9"),
     "dark pastel green":    Color.from_hex("#56AE57"),
     "dust":    Color.from_hex("#B2996E"),
@@ -1013,12 +1017,12 @@ XKCD_FULL_PALETTE = Palette(**{
     "blue":    Color.from_hex("#0343DF"),
     "green":    Color.from_hex("#15B01A"),
     "purple":    Color.from_hex("#7E1E9C")
-})
+}
 
 
 # selection of 48 colors from xkcd palette + white
 # (those are colors published directly on mentioned article)
-XKCD_49_PALETTE = Palette(**{
+XKCD_49_PALETTE = {
     "light pink":    Color.from_hex("#FFD1DF"),
     "mustard":    Color.from_hex("#CEB301"),
     "indigo":    Color.from_hex("#380282"),
@@ -1068,7 +1072,7 @@ XKCD_49_PALETTE = Palette(**{
     "green":    Color.from_hex("#15B01A"),
     "purple":    Color.from_hex("#7E1E9C"),
     "white":    Color.from_hex("#FFFFFF")
-})
+}
 
 # all available palettes
 PALETTES = {
@@ -1076,15 +1080,3 @@ PALETTES = {
     "xkcd_full": XKCD_FULL_PALETTE,
     "xkcd_49": XKCD_49_PALETTE
 }
-
-
-class PaletteColorsCounter(dict):
-    """ Helper class for counting occurrences of a given color. """
-
-    @staticmethod
-    def from_palette(palette):
-        """ Constructs dict with pre-populated keys from a given palette dict.
-
-         Sets initial counters to 0 for each key.
-        """
-        return PaletteColorsCounter(**{k:0 for k in palette.keys()})

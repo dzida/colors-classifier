@@ -7,9 +7,6 @@ from colors_classifier.api import extract_colors
 
 class PaletteExtractionTests(TestCase):
 
-    def test_no_image(self):
-        self.assertRaises(AssertionError, extract_colors, image_path=None)
-
     def test_not_existing_image(self):
         self.assertRaises(IOError, extract_colors, image_path="/not-existing-image.jpg")
 

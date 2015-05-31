@@ -37,8 +37,13 @@ To provide best results in various cases it is configurable which color space is
 Upon installation, main entry point is a 'colors-classifier extract_colors' program:
 
 ```
-colors-classifier extract_colors flag.jpg sign.jpg --max_colors 4 --palette_name xkcd_49 --color_space LAB
-{"sign.jpg": ["orange", "light blue", "black", "brown"], "flag.jpg": ["navy blue", "red", "white", "grey"]}
+colors-classifier extract_colors flag.jpg bag.jpg --max_colors 4 --palette_name xkcd_49 --color_space LAB --scale_by 0.25
+{"dark pink": ["bag.jpg"], "navy blue": ["flag.jpg"], "salmon": ["bag.jpg"], "grey": ["flag.jpg"], "maroon": ["bag.jpg"], "white": ["flag.jpg", "bag.jpg"], "red": ["flag.jpg"]}
+```
+
+For more information about program options:
+```
+colors-classifier extract_colors --help
 ```
 
 Output is a JSON-formatted string mapping a file names to list of colors.

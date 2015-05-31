@@ -17,7 +17,7 @@ def extract_colors_from_files(max_colors=1, scale_by=0.5, color_space=ColorSpace
 
      If an image cannot be read it is omitted from results, unless fail_silently flag is set to False.
 
-     Returns JSON-formatted object mapping image path to list of colors detected by an algorithm.
+     Returns JSON-formatted object mapping colors to a list of images used for examination.
     """
     results = {}
 
@@ -35,7 +35,10 @@ def extract_colors_from_files(max_colors=1, scale_by=0.5, color_space=ColorSpace
             if not fail_silently:
                 raise
         else:
-            results[image_path] = colors
+            for color in colors:
+                if color not in results:
+                    results[color] = []
+                results[color].append(image_path)
 
     return dumps(results)
 

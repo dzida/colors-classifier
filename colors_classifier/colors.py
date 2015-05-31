@@ -8,6 +8,10 @@ class ColorSpace(object):
     LAB = "LAB"
     RGB = "RGB"
 
+    @classmethod
+    def available_spaces(cls):
+        return cls.LAB, cls.RGB
+
 
 class Color(sRGBColor):
     """ Colors wrapper.

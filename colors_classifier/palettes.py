@@ -1,11 +1,47 @@
 # encoding: utf-8
+from sys import maxint
 from colors_classifier.colors import Color
+
+
+def manhattan(p1, p2):
+    return sum((abs(p1[i] - p2[i])) for i in range(len(p1)))
+
+
+class Palette(dict):
+    """ Wrapper for palette configuration.
+
+    Provides logic to find nearest color available in a palette.
+    """
+    def __init__(self, *args, **kwargs):
+        super(Palette, self).__init__(*args, **kwargs)
+        self._distance_index = tuple()
+
+    @property
+    def color_names(self):
+        return self.keys()
+
+    @property
+    def distance_index(self):
+        return self._distance_index
+
+    def find_nearest(self, color):
+        nearest_color = None
+        nearest_distance = maxint
+
+        for color_name, color_value in self.iteritems():
+            # distance = delta_e_cie1976(color.values(), color_value.values())
+            distance = manhattan(color.values(), color_value.values())
+            if distance < nearest_distance:
+                nearest_distance = distance
+                nearest_color = color_name, color_value
+
+        return nearest_color
 
 
 # pallete of 16 commonly used web colors
 # in accordance to HTML 4.01
 # (http://en.wikipedia.org/wiki/Web_colors)
-WEB_PALETTE = {
+WEB_PALETTE = Palette(**{
     "white":    Color.from_hex("#FFFFFF"),
     "silver":   Color.from_hex("#C0C0C0"),
     "gray":     Color.from_hex("#808080"),
@@ -22,12 +58,12 @@ WEB_PALETTE = {
     "navy":     Color.from_hex("#000080"),
     "fuchsia":  Color.from_hex("#FF00FF"),
     "purple":   Color.from_hex("#800080")
-}
+})
 
 
 # palette created as a result of survey
 # published by xkcd: http://blog.xkcd.com/2010/05/03/color-survey-results/
-XKCD_FULL_PALETTE = {
+XKCD_FULL_PALETTE = Palette(**{
     "cloudy blue":    Color.from_hex("#ACC2D9"),
     "dark pastel green":    Color.from_hex("#56AE57"),
     "dust":    Color.from_hex("#B2996E"),
@@ -977,12 +1013,12 @@ XKCD_FULL_PALETTE = {
     "blue":    Color.from_hex("#0343DF"),
     "green":    Color.from_hex("#15B01A"),
     "purple":    Color.from_hex("#7E1E9C")
-}
+})
 
 
 # selection of 48 colors from xkcd palette + white
 # (those are colors published directly on mentioned article)
-XKCD_49_PALETTE = {
+XKCD_49_PALETTE = Palette(**{
     "light pink":    Color.from_hex("#FFD1DF"),
     "mustard":    Color.from_hex("#CEB301"),
     "indigo":    Color.from_hex("#380282"),
@@ -1032,7 +1068,7 @@ XKCD_49_PALETTE = {
     "green":    Color.from_hex("#15B01A"),
     "purple":    Color.from_hex("#7E1E9C"),
     "white":    Color.from_hex("#FFFFFF")
-}
+})
 
 # all available palettes
 PALETTES = {

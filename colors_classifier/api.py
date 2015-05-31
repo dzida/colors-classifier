@@ -10,11 +10,7 @@ from colors_classifier.colors import Color
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie1976
 
-from palettes import XKCD_49_PALETTE, WEB_PALETTE, PaletteColorsCounter
-
-
-def manhattan(p1, p2):
-    return sum((abs(p1[i] - p2[i])) for i in range(len(p1)))
+from palettes import XKCD_49_PALETTE, PaletteColorsCounter
 
 
 def _load_image(image_path):
@@ -23,7 +19,7 @@ def _load_image(image_path):
 
 def _get_image_colors(image):
     _size = image.size
-    return ((count, Color(*color_tuple, is_upscaled=True)) for count, color_tuple in image.getcolors(_size[0] * _size[1]))
+    return ((count, Color(*rgb_color_tuple, is_upscaled=True)) for count, rgb_color_tuple in image.getcolors(_size[0] * _size[1]))
 
 
 def classify_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
@@ -37,28 +33,12 @@ def classify_colors(image_path, palette=XKCD_49_PALETTE, color_space="RGB"):
     # get colors from image
     image_colors = _get_image_colors(image)
 
-    palette = palette
-
-    def _get_nearest_color(color, palette):
-        nearest_color = None
-        nearest_distance = maxint
-
-        for color_name, color_value in palette.iteritems():
-            # distance = delta_e_cie1976(color.cords(), color_value.cords())
-            distance = manhattan(color.cords(), color_value.cords())
-            if distance < nearest_distance:
-                nearest_distance = distance
-                nearest_color = color_name
-
-        return nearest_color
-
     # calculate dominant color based on distance from each image color to each color in palette (brute, kdtree?)
     palette_colors = PaletteColorsCounter.from_palette(palette)
     for color_count, color in image_colors:
-        nearest_color_name = _get_nearest_color(color, palette)
+        nearest_color_name, _ = palette.find_nearest(color)
         palette_colors[nearest_color_name] += color_count
 
-    print "Palette colors", palette_colors
     return palette_colors
 
 

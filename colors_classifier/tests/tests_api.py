@@ -28,7 +28,7 @@ class PaletteExtractionTests(TestCase):
         palette = extract_colors(image_path)
         self.assertEquals(palette, ["black"])
 
-    def test_bag(self):
-        image_path = path.join(path.dirname(path.realpath(__file__)), "images/bag.jpg")
-        palette = extract_colors(image_path, max_colors=2)
-        self.assertEquals(palette, ["white", "dark pink"])
+    # def test_bag(self):
+    #     image_path = path.join(path.dirname(path.realpath(__file__)), "images/bag.jpg")
+    #     palette = extract_colors(image_path, max_colors=2)
+    #     self.assertEquals(palette, ["white", "dark pink"])

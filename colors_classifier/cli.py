@@ -11,7 +11,7 @@ def extract_colors(max_colors=1, *args):
         colors = api.extract_colors(image_path, max_colors=max_colors)
         results[image_path] = colors
 
-    print results
+    return results
 
 
 def main():

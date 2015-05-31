@@ -39,8 +39,9 @@ colors-classifier extract_colors <IMAGE_PATHS> --max_colors 4 --palette web --co
 
 ## Dependencies
 Version numbers refer to dependencies versions used in tests.
-* colormath - 2.2.1  (RGB-LAB conversion)
+* colormath - 2.1.1  (RGB-LAB conversion)
 * numpy - 1.9.2  (colormath dependency)
 * baker - 1.3  (CLI helper)
 * Pillow - 2.8.1 (imaging library)
-
+* scikit-learn - 0.16.1 (knn algorithm implementation)
+* scipy - 0.15.1 (scikit-learn dependency)

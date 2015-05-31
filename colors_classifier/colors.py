@@ -3,7 +3,12 @@ from colormath.color_objects import sRGBColor
 
 
 class Color(sRGBColor):
+    """ Colors wrapper.
 
+    Provides a simple interface for creating images and representing them as a space coordinates.
+
+    Wraps functionality from colormath.color_objects
+    """
     def __eq__(self, other):
         return self.values() == other.values()
 

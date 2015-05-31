@@ -14,3 +14,6 @@ class PaletteExtractionTests(TestCase):
         image_path = path.join(path.dirname(path.realpath(__file__)), "images/1x1/ff0000.jpg")
         image_palette = extract_colors(image_path)
         self.assertEquals(image_palette, ["red"])
+
+    # scale down
+    # max colors
